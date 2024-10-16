@@ -26,19 +26,27 @@ private double interest;
         this.interest=0.005;
     }
     //fungsi connect ke database
-    private Connection connect() {
+    public  Connection connect() {
         // Ganti sesuai dengan konfigurasi MySQL Anda
-        String url = "jdbc:mysql://localhost:3306/bank";
-        String user = "root";
-        String password = "";
+        // Ganti sesuai dengan konfigurasi MySQL Anda
+        String url = "jdbc:mysql://sql12.freesqldatabase.com :3306/sql12738197";
+        String user = "sql12738197";
+        String password = "a6LtJ6p5Ps";
         Connection con = null;
 
         try {
             // Load driver JDBC
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, user, password);
+            
+            if (con != null) {
+                System.out.println("Connected to the database!");
+            } else {
+                System.out.println("Failed to make connection!");
+            }
         } catch (Exception e) {
             System.out.println("Connection Failed: " + e.getMessage());
+            System.out.println("jika eror");
         }
 
         return con;
@@ -168,7 +176,7 @@ private double interest;
         return balance;
     }
     //fungsi validasi apakah transfer bisa dilakukan
-    public boolean validTranfer(int parameter, String no_rek, double nominal) {
+    public boolean validTranfer(int parameter, String rekening, double nominal) {
         Connection conn = connect();
         if (conn == null) {
             JOptionPane.showMessageDialog(null, "Cannot connect to the database!");
@@ -176,7 +184,7 @@ private double interest;
         }
     
         String cekSaldo = "SELECT balance FROM accounts WHERE user_id = ?";
-        String cekRekening = "SELECT 1 FROM accounts WHERE no_rek = ?";
+        String cekRekening = "SELECT 1 FROM accounts WHERE rekening = ?";
     
         try {
             // Mengecek saldo pengirim
@@ -195,7 +203,7 @@ private double interest;
     
                 // Mengecek apakah nomor rekening penerima valid
                 PreparedStatement pstSelectNoRek = conn.prepareStatement(cekRekening);
-                pstSelectNoRek.setString(1, no_rek);
+                pstSelectNoRek.setString(1, rekening);
                 ResultSet rsRek = pstSelectNoRek.executeQuery();
     
                 // Jika nomor rekening valid
@@ -225,8 +233,8 @@ private double interest;
     
     //buat fungsi tranfer ketika syarat transfer tervalidasi
     //ini yang dipanggil
-    public void actionTransfer(int parameter, String no_rek, double nominal) {
-        if (validTranfer(parameter, no_rek, nominal)) {
+    public void actionTransfer(int parameter, String rekening, double nominal) {
+        if (validTranfer(parameter, rekening, nominal)) {
             Connection conn = connect();
             if (conn == null) {
                 JOptionPane.showMessageDialog(null, "Cannot connect to the database!");
@@ -234,9 +242,9 @@ private double interest;
             }
     
             String sender = "UPDATE accounts SET balance = ? WHERE user_id = ?";
-            String receiver = "UPDATE accounts SET balance = ? WHERE no_rek = ?";
+            String receiver = "UPDATE accounts SET balance = ? WHERE rekening = ?";
             String getSenderBalance = "SELECT balance FROM accounts WHERE user_id = ? FOR UPDATE";
-            String getReceiverBalance = "SELECT balance FROM accounts WHERE no_rek = ? FOR UPDATE";
+            String getReceiverBalance = "SELECT balance FROM accounts WHERE rekening = ? FOR UPDATE";
             
             try {
                 // Disable auto-commit mode to start transaction
@@ -257,7 +265,7 @@ private double interest;
     
                 // Mendapatkan saldo penerima dan mengunci barisnya
                 PreparedStatement pstGetReceiverBalance = conn.prepareStatement(getReceiverBalance);
-                pstGetReceiverBalance.setString(1, no_rek);
+                pstGetReceiverBalance.setString(1, rekening);
                 ResultSet rsReceive = pstGetReceiverBalance.executeQuery();
                 double balanceReceiver = 0;
                 if (rsReceive.next()) {
@@ -284,7 +292,7 @@ private double interest;
                 // Update saldo penerima
                 PreparedStatement pstSetReceiverBalance = conn.prepareStatement(receiver);
                 pstSetReceiverBalance.setDouble(1, balanceReceiver + nominal);
-                pstSetReceiverBalance.setString(2, no_rek);
+                pstSetReceiverBalance.setString(2, rekening);
                 pstSetReceiverBalance.executeUpdate();
     
                 
@@ -293,7 +301,7 @@ private double interest;
                 conn.commit();
 
                 // Mencatat riwayat transfer
-                TransferHistory(parameter, no_rek, nominal);
+                TransferHistory(parameter, rekening, nominal);
             } catch (Exception e) {
                 try {
                     // Rollback transaction in case of error
@@ -318,7 +326,7 @@ private double interest;
     
     //fungsi atau method menyimpan history transfer
     //memerlukan sender dan receiver id dan amount atau nominalnya
-    private void TransferHistory(int pengirim, String no_rek, double nominal) {
+    private void TransferHistory(int pengirim, String rekening, double nominal) {
         Connection conn = null;
         int id_receiver = 0;
     
@@ -333,9 +341,9 @@ private double interest;
             conn.setAutoCommit(false);
     
             // Mendapatkan id receiver
-            String getIdReceiver = "SELECT account_id FROM accounts WHERE no_rek = ?";
+            String getIdReceiver = "SELECT account_id FROM accounts WHERE rekening = ?";
             PreparedStatement pst = conn.prepareStatement(getIdReceiver);
-            pst.setString(1, no_rek);
+            pst.setString(1, rekening);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 id_receiver = rs.getInt("account_id");
@@ -420,7 +428,7 @@ private double interest;
     
             // Query untuk menggabungkan tabel users dan accounts
             String query =  "SELECT users.id AS user_id, users.username, users.password, users.fullname, "+
-                            "accounts.account_id, accounts.balance, accounts.no_rek, accounts.created_at "+
+                            "accounts.account_id, accounts.balance, accounts.rekening, accounts.created_at "+
                             "FROM users "+ 
                             "INNER JOIN accounts "+ 
                             "ON users.id = accounts.account_id "+ 
@@ -439,7 +447,7 @@ private double interest;
                 String password = rs.getString("password");
                 String fullname = rs.getString("fullname");
                 String balance = Double.toString(rs.getDouble("balance"));
-                String noRek = rs.getString("no_rek");
+                String noRek = rs.getString("rekening");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String formattedDate = dateFormat.format(rs.getTimestamp("created_at"));
     

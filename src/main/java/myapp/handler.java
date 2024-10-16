@@ -40,17 +40,24 @@ private int id;
 
     private Connection connect() {
         // Ganti sesuai dengan konfigurasi MySQL Anda
-        String url = "jdbc:mysql://localhost:3306/bank";
-        String user = "root";
-        String password = "";
+        String url = "jdbc:mysql://sql12.freesqldatabase.com :3306/sql12738197";
+        String user = "sql12738197";
+        String password = "a6LtJ6p5Ps";
         Connection con = null;
 
         try {
             // Load driver JDBC
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, user, password);
+            
+            if (con != null) {
+                System.out.println("Connected to the database!");
+            } else {
+                System.out.println("Failed to make connection!");
+            }
         } catch (Exception e) {
             System.out.println("Connection Failed: " + e.getMessage());
+            System.out.println("jika eror");
         }
 
         return con;
@@ -127,8 +134,9 @@ private int id;
             backdaftar.setPassword(password);
             return;
         }
+        
         String sql = "INSERT INTO users(username, password, fullname) VALUES (?, ?, ?)";
-        String account = "INSERT INTO accounts(user_id, balance, no_rek) VALUES(?, ?, ?)";
+        String account = "INSERT INTO accounts(user_id, balance, rekening) VALUES(?, ?, ?)";
         //buat mengecek atau mencoba jika berhasil connect ke db
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -149,12 +157,20 @@ private int id;
                         
                         // Melanjutkan untuk insert ke tabel accounts
                         try (PreparedStatement pstmtAccount = conn.prepareStatement(account)) {
+                            String noRek = generateUniqueRekening();
+                            System.out.println("Generated No Rek: " + noRek); // Tambahkan debugging di sini
+                            
+                            if (noRek == null || noRek.isEmpty()) {
+                                throw new SQLException("Nomor rekening tidak boleh kosong");
+                            }
+                            
                             pstmtAccount.setLong(1, userid);
                             pstmtAccount.setDouble(2, 0.0); // Saldo awal, misal 0.0
-                            pstmtAccount.setString(3, generateUniqueRekening()); // Nomor rekening unik
+                            pstmtAccount.setString(3, noRek); // Nomor rekening unik
                             
                             pstmtAccount.executeUpdate();
                         }
+                        
                         
                         System.out.println("User dan akun berhasil disimpan!");
                         JOptionPane.showMessageDialog(null, "Selamat, Anda berhasil mendaftar!");
@@ -163,14 +179,17 @@ private int id;
                 }
             }
         } catch (SQLException e) {
+            //masih eror disini 
+            e.printStackTrace(); // Ini akan mencetak stack trace lengkap ke konsol
             System.out.println("Error: " + e.getMessage());
-            JOptionPane.showMessageDialog(null, "EROR :"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "EROR: " + e.getMessage());
+            
             daftar backdaftar = new daftar();
             backdaftar.setVisible(true);
             backdaftar.setFullname(fullname);
             backdaftar.setPassword(password);
-            return;
         }
+        
 
 
     }
@@ -188,13 +207,13 @@ private int id;
     //fungsi generate nomor rekening
     public String generaterek(){
         SecureRandom random = new SecureRandom();
-        StringBuilder no_rek = new StringBuilder(10);
+        StringBuilder rekening = new StringBuilder(10);
         for (int i = 0; i < 10; i++) {
             int digit = random.nextInt(10);
-            no_rek.append(digit);
+            rekening.append(digit);
         }
 
-        return no_rek.toString();
+        return rekening.toString();
     }
 
     // Mengecek apakah nomor rekening sudah ada di database
@@ -203,7 +222,7 @@ private int id;
         
         // Koneksi ke database
         try (Connection connection = connect()) {
-            String query = "SELECT COUNT(*) FROM accounts WHERE no_rek = ?";
+            String query = "SELECT COUNT(*) FROM accounts WHERE rekening = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, rekeningNumber);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -272,12 +291,12 @@ private int id;
         String norek;
         Connection conn = connect();
         try {
-            String query="SELECT no_rek FROM accounts WHERE user_id = ?";
+            String query="SELECT rekening FROM accounts WHERE user_id = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, id);
             ResultSet res = ps.executeQuery();
             res.next();
-            norek = res.getString("no_rek");
+            norek = res.getString("rekening");
             
             return norek; 
         } catch (Exception e) {
