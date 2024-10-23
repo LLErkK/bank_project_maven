@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package myapp;
+package view.menu;
+
+import controller.transferController;
+import view.LoginSignin.login;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,16 +16,18 @@ import javax.swing.JOptionPane;
  *
  * @author USER
  */
-public class tariktunai extends javax.swing.JFrame {
+public class transfer extends javax.swing.JFrame {
 private int id;
-Operasi operasi = new Operasi();
+private transferController transferControl;
     /**
-     * Creates new form tariktunai
+     * Creates new form transfer
      */
-    public tariktunai(int id) {
-        this.id = id;
+
+    public transfer(int id) {
+        this.id= id;
         initComponents();
         setLocationRelativeTo(null);
+        this.transferControl = new transferController(this.id);
     }
 
     /**
@@ -49,11 +54,13 @@ Operasi operasi = new Operasi();
         jLabel11 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        //agar hanya angka yang diinput
+        //listener agar inputan hanya angka
         jTextField2.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e){
                 char karakter = e.getKeyChar();
@@ -62,24 +69,30 @@ Operasi operasi = new Operasi();
                 }
             }
         });
-        //listiner tombol
-        
+        jTextField1.addKeyListener(new KeyAdapter() {
+            public  void keyTyped(KeyEvent e){
+                char karakter = e.getKeyChar();
+                if(!Character.isDigit(karakter)){
+                    e.consume();
+                }
+            }
+        });
+        //listener 
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         //saldo5 ke home
         saldo5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt){
                 clickHome(evt);
             }
         });
-        //saldo ke ceksaldo
+        //saldo ke cekSaldo
         saldo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt){
                 clickSaldo(evt);
-            }
-        });
-        //saldo2 ke transfer
-        saldo2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt){
-                clickTransfer(evt);
             }
         });
         //saldo3 ke deposit
@@ -88,10 +101,16 @@ Operasi operasi = new Operasi();
                 clickDeposit(evt);
             }
         });
-        //saldo6 ke logout
+        //saldo4 ke tarik tunai
+        saldo4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                clickTunai(evt);
+            }
+        });
+        //saldo6 logout
         saldo6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt){
-                clicklogout(evt);
+                clickLogout(evt);
             }
         });
 
@@ -119,10 +138,9 @@ Operasi operasi = new Operasi();
             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        saldo2.setBackground(new java.awt.Color(197, 112, 93));
+        saldo2.setBackground(new java.awt.Color(248, 237, 227));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText(" Transfer");
 
         javax.swing.GroupLayout saldo2Layout = new javax.swing.GroupLayout(saldo2);
@@ -159,9 +177,10 @@ Operasi operasi = new Operasi();
             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        saldo4.setBackground(new java.awt.Color(248, 237, 227));
+        saldo4.setBackground(new java.awt.Color(197, 112, 93));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Tarik Tunai");
 
         javax.swing.GroupLayout saldo4Layout = new javax.swing.GroupLayout(saldo4);
@@ -244,43 +263,51 @@ Operasi operasi = new Operasi();
                 .addComponent(saldo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saldo6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(248, 237, 227));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Tarik Tunai");
+        jLabel1.setText("Transfer");
+
+        jLabel3.setText("Rekening Tujuan");
+
+        jTextField1.setText("");
 
         jTextField2.setText("");
 
-        jLabel4.setText("Nominal Tarik");
+        jLabel4.setText("Nominal Transfer");
 
         jButton1.setText("Kirim");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(192, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(248, 248, 248))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(194, 194, 194))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(242, 242, 242))))
+                        .addGap(241, 241, 241))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,6 +315,10 @@ Operasi operasi = new Operasi();
                 .addGap(105, 105, 105)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -316,20 +347,28 @@ Operasi operasi = new Operasi();
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        String input = jTextField2.getText();
-        boolean kosong = input.equals("");
-        if(!kosong){
-            double nominal = Double.parseDouble(input);
-            double hasil = operasi.tarik(id, nominal);
-            JOptionPane.showMessageDialog(null, "Anda berhasil Tarik tunai. Sisa saldo anda sekarang "+hasil);
+        String kosong ="";
+        String noRek = jTextField1.getText();
+        String duit = jTextField2.getText();
+        boolean kosongSemua,kosongSatu,kosongDua;
+        kosongSemua = noRek.equals(kosong) && duit.equals(kosong);
+        kosongSatu = noRek.equals(kosong);
+        kosongDua = duit.equals(kosong);
+        if(kosongSemua){
+            JOptionPane.showMessageDialog(null, "Nomor Rekening dan nominal tidak boleh kosong!");
+        }else if (kosongSatu) {
+            JOptionPane.showMessageDialog(null, "Nomor Rekening tidak boleh kosong!");
+        }else if(kosongDua){
+            JOptionPane.showMessageDialog(null, "Nominal tidak boleh kosong!");
         }else{
-            JOptionPane.showMessageDialog(null, "Inputan Tidak Boleh Kosong!");
+            double nominal = Double.parseDouble(duit);
+            transferControl.actionTransfer( noRek, nominal);
         }
-        
+       
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    //handler tombol speerti biasa
+    //handler tombol
     private void clickHome(java.awt.event.MouseEvent evt){
         new menu(id).setVisible(true);
         dispose();   
@@ -338,18 +377,19 @@ Operasi operasi = new Operasi();
         new CekSaldo(id).setVisible(true);
         dispose();   
     }
-    private void clickTransfer(java.awt.event.MouseEvent evt){
-        new transfer(id).setVisible(true);
-        dispose();   
-    }
     private void clickDeposit(java.awt.event.MouseEvent evt){
         new Depo(id).setVisible(true);
         dispose();   
     }
-    private void clicklogout(java.awt.event.MouseEvent evt){
+    private void clickTunai(java.awt.event.MouseEvent evt){
+        new tariktunai(id).setVisible(true);
+        dispose();   
+    }
+    private void clickLogout(java.awt.event.MouseEvent evt){
         new login().setVisible(true);
         dispose();   
     }
+
     /**
      * @param args the command line arguments
      */
@@ -367,21 +407,21 @@ Operasi operasi = new Operasi();
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(transfer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(transfer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(transfer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(transfer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                handler handler = new handler();
-                new tariktunai(handler.getid()).setVisible(true);
+                ;
+                new transfer(0).setVisible(true);
             }
         });
     }
@@ -392,12 +432,14 @@ Operasi operasi = new Operasi();
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel saldo;
     private javax.swing.JPanel saldo2;

@@ -1,4 +1,7 @@
-package myapp;
+package view.LoginSignin;
+
+import controller.authController;
+import view.menu.menu;
 
 import javax.swing.JOptionPane;
 
@@ -150,11 +153,10 @@ public class login extends javax.swing.JFrame {
         String username = jTextField2.getText();
         String password = new String(jPasswordField1.getPassword());
 
-        handler handler = new handler(); // Inisialisasi handler dengan ID default 0
-        if (handler.login(username, password)) {
+        authController ac = new authController();
+        if (ac.login(username, password)) {
             JOptionPane.showMessageDialog(this, "Login berhasil!");
-            handler session = handler.getInstance(0);
-            int id = handler.getid();
+            int id = ac.getId();
             new menu(id).setVisible(true); // Tampilkan menu
             dispose(); // Tutup jendela login
         } else {

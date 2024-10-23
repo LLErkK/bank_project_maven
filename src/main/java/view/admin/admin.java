@@ -1,4 +1,4 @@
-package myapp;
+package view.admin;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -6,6 +6,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import controller.adminController;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class admin extends JFrame {
-    Operasi operasi = new Operasi();
+    adminController ac = new adminController();
     private JComboBox<String> tableSelector;
     private JComboBox<String> columnSelector;
     private JTable table;
@@ -133,21 +134,22 @@ public class admin extends JFrame {
         tableModel.setColumnCount(0);
         if ("Transaksi".equals(selectedTable)) {
             tableModel.setColumnIdentifiers(new String[]{"ID Transaksi", "ID User", "Tipe","Jumlah","Tanggal"});
-            ArrayList<ArrayList<String>> transaksiData = operasi.getTransaction(banyak);
+            ArrayList<ArrayList<String>> transaksiData = ac.getTransaction(banyak);
             for (ArrayList<String> row : transaksiData) {
                 tableModel.addRow(row.toArray());
             }
         } else if ("Transfer".equals(selectedTable)) {
             tableModel.setColumnIdentifiers(new String[]{"ID Transfer", "Akun Pengirim", "Akun Penerima", "Jumlah"});
-            ArrayList<ArrayList<String>> transaksiData = operasi.getTransfer(banyak);
+            ArrayList<ArrayList<String>> transaksiData = ac.getTransfer(banyak);
             for (ArrayList<String> row : transaksiData) {
                 tableModel.addRow(row.toArray());
             }
         } else if ("Account".equals(selectedTable)) {
             tableModel.setColumnIdentifiers(new String[]{"ID", "Username", "Password", "fullname", "balance","No.Rek", "tanggal Dibuat"});
-            ArrayList<ArrayList<String>> akun = operasi.getUsers(banyak);
+            ArrayList<ArrayList<String>> akun = ac.getUsers(banyak);
             for (ArrayList<String> row : akun) {
                 tableModel.addRow(row.toArray());
+
             }
         }
     }

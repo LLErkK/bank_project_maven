@@ -2,24 +2,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package myapp;
+package view.menu;
+
+import controller.withdrawController;
+import model.getAccountData;
+import view.LoginSignin.login;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author USER
  */
-public class menu extends javax.swing.JFrame {
-    private int id;
+public class tariktunai extends javax.swing.JFrame {
+private int id;
+
     /**
-     * Creates new form menu
+     * Creates new form tariktunai
      */
-    
-    public menu(int id) {
+    public tariktunai(int id) {
         this.id = id;
         initComponents();
         setLocationRelativeTo(null);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,42 +52,52 @@ public class menu extends javax.swing.JFrame {
         saldo6 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
-        handler handler = new handler();
-
+        //agar hanya angka yang diinput
+        jTextField2.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e){
+                char karakter = e.getKeyChar();
+                if(!Character.isDigit(karakter)){
+                    e.consume();
+                }
+            }
+        });
+        //listiner tombol
+        
+        //saldo5 ke home
+        saldo5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                clickHome(evt);
+            }
+        });
+        //saldo ke ceksaldo
         saldo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
                 clickSaldo(evt);
             }
         });
+        //saldo2 ke transfer
         saldo2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
                 clickTransfer(evt);
             }
         });
+        //saldo3 ke deposit
         saldo3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
                 clickDeposit(evt);
             }
         });
-        saldo4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                clickTarik(evt);
-            }
-        });
+        //saldo6 ke logout
         saldo6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
                 clicklogout(evt);
             }
         });
-
-
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,10 +163,9 @@ public class menu extends javax.swing.JFrame {
             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        saldo4.setBackground(new java.awt.Color(197, 112, 93));
+        saldo4.setBackground(new java.awt.Color(248, 237, 227));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Tarik Tunai");
 
         javax.swing.GroupLayout saldo4Layout = new javax.swing.GroupLayout(saldo4);
@@ -164,9 +182,10 @@ public class menu extends javax.swing.JFrame {
             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
-        saldo5.setBackground(new java.awt.Color(248, 237, 227));
+        saldo5.setBackground(new java.awt.Color(197, 112, 93));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Home");
 
         javax.swing.GroupLayout saldo5Layout = new javax.swing.GroupLayout(saldo5);
@@ -229,60 +248,55 @@ public class menu extends javax.swing.JFrame {
                 .addComponent(saldo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saldo6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(248, 237, 227));
 
-        jLabel5.setFont(new java.awt.Font("Nirmala UI", 1, 36)); // NOI18N
-        jLabel5.setText("Selamat Datang di ");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Tarik Tunai");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
-        jLabel6.setText("Bank Jangan Bang");
+        jTextField2.setText("");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Username : "+handler.getUserName(id));
+        jLabel4.setText("Nominal Tarik");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("Fullname : "+handler.getFullName(id));
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel4.setText("No.Rekening : "+handler.getNoRek(id));
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI Variable", 1, 12)); // NOI18N
-        jLabel12.setText("Saldo : Rp"+handler.getSaldo(id));
+        jButton1.setText("Kirim");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(88, 88, 88)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel5))
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel12))
-                .addContainerGap(110, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(248, 248, 248))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(194, 194, 194))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(242, 242, 242))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
-                .addGap(28, 28, 28)
+                .addGap(105, 105, 105)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -293,8 +307,7 @@ public class menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(53, 53, 53))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,39 +318,46 @@ public class menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //handler panel1
-    private void clickSaldo(java.awt.event.MouseEvent evt) {
-        // Tindakan ketika JPanel saldo diklik
-        new CekSaldo(id).setVisible(true);
-        dispose();
-    }
-    //handler click transfer
-    private void clickTransfer(java.awt.event.MouseEvent evt) {
-        // Tindakan ketika JPanel tranfer diklik
-        new transfer(id).setVisible(true);
-        dispose();
-    }
-    //handler klik deposit
-    private void clickDeposit(java.awt.event.MouseEvent evt) {
-        // Tindakan ketika JPanel deposit diklik
-        new Depo(id).setVisible(true);
-        dispose();
-    }
-    //handler klik tarik
-    private void clickTarik(java.awt.event.MouseEvent evt) {
-        // Tindakan ketika JPanel saldo diklik
-        new tariktunai(id).setVisible(true);
-        dispose();
-    }
-    private void clicklogout(java.awt.event.MouseEvent evt) {
-        // Tindakan ketika JPanel saldo diklik
-        new login().setVisible(true);
-        dispose();
-    }
-    //buat fungsi mengambil atribut users
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        String input = jTextField2.getText();
+        boolean kosong = input.equals("");
+        if(!kosong){
+            double nominal = Double.parseDouble(input);
+            withdrawController wc = new withdrawController(this.id);
+            if(wc.isWithdrawValid(nominal)){
+                getAccountData gad = new getAccountData(this.id);
+                JOptionPane.showMessageDialog(null, "Anda berhasil Tarik tunai. Sisa saldo anda sekarang "+gad.getBalance());
+            }
 
-  
-    
+        }else{
+            JOptionPane.showMessageDialog(null, "Inputan Tidak Boleh Kosong!");
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    //handler tombol speerti biasa
+    private void clickHome(java.awt.event.MouseEvent evt){
+        new menu(id).setVisible(true);
+        dispose();   
+    }
+    private void clickSaldo(java.awt.event.MouseEvent evt){
+        new CekSaldo(id).setVisible(true);
+        dispose();   
+    }
+    private void clickTransfer(java.awt.event.MouseEvent evt){
+        new transfer(id).setVisible(true);
+        dispose();   
+    }
+    private void clickDeposit(java.awt.event.MouseEvent evt){
+        new Depo(id).setVisible(true);
+        dispose();   
+    }
+    private void clicklogout(java.awt.event.MouseEvent evt){
+        new login().setVisible(true);
+        dispose();   
+    }
     /**
      * @param args the command line arguments
      */
@@ -355,40 +375,38 @@ public class menu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(tariktunai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                handler handler = new handler();
-                new menu(handler.getid()).setVisible(true);
+
+                new tariktunai(0).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel saldo;
     private javax.swing.JPanel saldo2;
     private javax.swing.JPanel saldo3;

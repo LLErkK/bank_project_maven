@@ -4,6 +4,8 @@
  */
 package myapp;
 
+import view.LoginSignin.login;
+import database.DatabaseSetup;
 /**
  *
  * @author hp
@@ -14,7 +16,8 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        String[] arguments ={};
+        DatabaseSetup.main(arguments);
         new login().setVisible(true);
     }
     

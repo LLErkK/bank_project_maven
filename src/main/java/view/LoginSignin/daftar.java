@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package myapp;
+package view.LoginSignin;
 
+
+import controller.daftarController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -106,7 +108,19 @@ public class daftar extends javax.swing.JFrame {
                 jPasswordField1.requestFocus();
             }
             });
-        
+        jTextField1.addKeyListener(new KeyAdapter() {
+
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                // Jika karakter bukan huruf, batalkan input
+                if (!Character.isLetter(c)) {
+                    e.consume(); // Batalkan karakter yang tidak sesuai
+
+                }
+            }
+        });
+
+
         jTextField2.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e){
                 char karakter = e.getKeyChar();
@@ -178,17 +192,6 @@ public class daftar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     // Event handler untuk tombol button1
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,8 +201,8 @@ public class daftar extends javax.swing.JFrame {
         String password = new String(jPasswordField1.getPassword());
 
         // Buat instance dari DBHandler dan simpan data ke database
-        handler handler = new handler();
-        handler.daftar(username, password, fullname);
+        daftarController dc = new daftarController();
+        dc.daftar(username, password, fullname);
         dispose();
     }
     //eventhandler tombol back
